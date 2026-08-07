@@ -1,23 +1,24 @@
 # ModGadget Examples
 
-Practical application examples for
-[ModGadget](https://github.com/rdon-key/modgadget). These examples combine
-multiple library features and complement the small API-focused examples kept
-in the ModGadget repository.
-
-The examples use `github.com/rdon-key/modgadget` and
-`github.com/rdon-key/modgadget-fonts` as ordinary Go module dependencies. The
-module does not require a local checkout of either repository.
+[ModGadget](https://github.com/rdon-key/modgadget)を使うCardputer ADV向けの
+TinyGo example集です。ModGadgetと`modgadget-fonts`は通常のGo module依存
+として取得されるため、ModGadget本体のcloneは不要です。各exampleは独立して
+buildでき、静的表示からkeyboard applicationまで順番に試せます。
 
 ## Examples
 
-| example | description | hardware |
+| Example | 内容 |
 | --- | --- | --- |
-| [`keyboard-typing`](keyboard-typing/) | Typed-text UI combining direct keyboard events, multiple viewports, markup-safe text, fonts, and ModGadget system audio controls | M5Stack Cardputer ADV |
+| [`multilingual-text`](multilingual-text/) | 英語・日本語・中国語・韓国語の静的表示 |
+| [`multilingual-ticker`](multilingual-ticker/) | 4言語文字列のloop horizontal scroll |
+| [`multilingual-document`](multilingual-document/) | 4言語のModGadget紹介文をvertical scroll |
+| [`audio-beep`](audio-beep/) | Cardputer ADVで音を再生 |
+| [`keyboard-typing`](keyboard-typing/) | keyboardを使ったtyping application |
 
 ## Test
 
-Host-side logic and package checks can be run with:
+Host側で確認できるlogic testは次で実行します。hardware用`main.go`はTinyGo
+build tag付きです。
 
 ```sh
 go test ./...
@@ -25,15 +26,15 @@ go test ./...
 
 ## TinyGo build
 
-The hardware example requires TinyGo and a Cardputer ADV-compatible target.
-The current ModGadget setup uses the `m5stamp-s3a` target:
+Cardputer ADV対応の`m5stamp-s3a` targetを含むTinyGo開発版が必要です。
+例えば最初のexampleは次のようにbuildします。
 
 ```sh
-tinygo build -target=m5stamp-s3a ./keyboard-typing
+tinygo build -target=m5stamp-s3a ./multilingual-text
 ```
 
-Building does not flash the device. Flashing and serial-port access are
-separate operations and are not required to use this repository.
+他のexampleも末尾のdirectory名を置き換えて単独でbuildできます。flashは
+各exampleのREADMEに記載した別操作です。
 
 ## License
 
