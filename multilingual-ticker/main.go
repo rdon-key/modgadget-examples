@@ -10,7 +10,10 @@ import (
 	board "github.com/rdon-key/modgadget/device/cardputeradv"
 )
 
-const message = "English 日本語 中文 한국어"
+const message = "<style=english>English </style>" +
+	"<style=japanese>日本語 </style>" +
+	"<style=chinese>中文 </style>" +
+	"<style=korean><b>한국어</b></style>"
 
 func main() {
 	time.Sleep(3 * time.Second)
@@ -18,8 +21,15 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	font := efont16.Font
 	gadget := modgadget.New(panel, modgadget.WithStyles(modgadget.StyleSet{
-		Default: modgadget.Style{Font: efont16.Font, Foreground: modgadget.ColorWhite, Background: modgadget.ColorBlack},
+		Default: modgadget.Style{Font: font, Foreground: modgadget.ColorWhite, Background: modgadget.ColorBlack},
+		Entries: []modgadget.StyleEntry{
+			{Name: "english", Style: modgadget.Style{Font: font, Foreground: modgadget.RGB565(255, 64, 64), Background: modgadget.ColorBlack}},
+			{Name: "japanese", Style: modgadget.Style{Font: font, Foreground: modgadget.RGB565(255, 208, 64), Background: modgadget.ColorBlack}},
+			{Name: "chinese", Style: modgadget.Style{Font: font, Foreground: modgadget.RGB565(96, 224, 128), Background: modgadget.ColorBlack}},
+			{Name: "korean", Style: modgadget.Style{Font: font, Foreground: modgadget.RGB565(96, 224, 128), Background: modgadget.ColorBlack}},
+		},
 	}))
 	if err := gadget.Clear(); err != nil {
 		panic(err)

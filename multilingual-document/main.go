@@ -13,6 +13,13 @@ import (
 
 const visibleLines = 8
 
+const (
+	styleEnglish  = "english"
+	styleJapanese = "japanese"
+	styleChinese  = "chinese"
+	styleKorean   = "korean"
+)
+
 var documentLines = [...]string{
 	"ModGadget",
 	"",
@@ -81,9 +88,36 @@ func visibleDocument(first int) string {
 		if index > 0 {
 			text.WriteString("<br>")
 		}
-		text.WriteString(documentLines[first+index])
+		lineIndex := first + index
+		line := documentLines[lineIndex]
+		style := documentStyle(lineIndex)
+		if line != "" && style != "" {
+			text.WriteString("<style=")
+			text.WriteString(style)
+			text.WriteString(">")
+		}
+		text.WriteString(line)
+		if line != "" && style != "" {
+			text.WriteString("</style>")
+		}
 	}
 	return text.String()
+}
+
+func documentStyle(line int) string {
+	for ; line >= 0; line-- {
+		switch documentLines[line] {
+		case "English":
+			return styleEnglish
+		case "日本語":
+			return styleJapanese
+		case "中文":
+			return styleChinese
+		case "한국어":
+			return styleKorean
+		}
+	}
+	return ""
 }
 
 func main() {
@@ -92,8 +126,15 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	font := efont16.Font
 	gadget := modgadget.New(panel, modgadget.WithStyles(modgadget.StyleSet{
-		Default: modgadget.Style{Font: efont16.Font, Foreground: modgadget.ColorWhite, Background: modgadget.ColorBlack},
+		Default: modgadget.Style{Font: font, Foreground: modgadget.ColorWhite, Background: modgadget.ColorBlack},
+		Entries: []modgadget.StyleEntry{
+			{Name: styleEnglish, Style: modgadget.Style{Font: font, Foreground: modgadget.RGB565(255, 64, 64), Background: modgadget.ColorBlack}},
+			{Name: styleJapanese, Style: modgadget.Style{Font: font, Foreground: modgadget.RGB565(255, 208, 64), Background: modgadget.ColorBlack}},
+			{Name: styleChinese, Style: modgadget.Style{Font: font, Foreground: modgadget.RGB565(96, 224, 128), Background: modgadget.ColorBlack}},
+			{Name: styleKorean, Style: modgadget.Style{Font: font, Foreground: modgadget.RGB565(64, 192, 255), Background: modgadget.ColorBlack}},
+		},
 	}))
 	if err := gadget.Clear(); err != nil {
 		panic(err)
