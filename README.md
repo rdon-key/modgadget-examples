@@ -1,42 +1,103 @@
 # ModGadget Examples
 
-[ModGadget](https://github.com/rdon-key/modgadget)を使うCardputer ADV向けの
-TinyGo example集です。ModGadgetと`modgadget-fonts`は通常のGo module依存
-として取得されるため、ModGadget本体のcloneは不要です。各exampleは独立して
-buildでき、静的表示からkeyboard applicationまで順番に試せます。
+This repository contains standalone TinyGo examples for the M5Stack Cardputer ADV using [ModGadget](https://github.com/rdon-key/modgadget).
+
+ModGadget and [ModGadget Fonts](https://github.com/rdon-key/modgadget-fonts) are obtained as ordinary Go module dependencies. A local clone of the ModGadget repository is not required.
+
+Each example can be built independently and demonstrates a specific part of the ModGadget application model, ranging from static multilingual text to keyboard-driven applications.
 
 ## Examples
 
-| Example | 内容 |
-| --- | --- | --- |
-| [`multilingual-text`](multilingual-text/) | 英語・日本語・中国語・韓国語の静的表示 |
-| [`multilingual-ticker`](multilingual-ticker/) | 4言語文字列のloop horizontal scroll |
-| [`multilingual-ticker2`](multilingual-ticker2/) | 24dotの4言語tickerを別々の位置・速度で表示し、elapsed timerを表示 |
-| [`multilingual-document`](multilingual-document/) | 4言語のModGadget紹介文をvertical scroll |
-| [`audio-beep`](audio-beep/) | Cardputer ADVで音を再生 |
-| [`keyboard-typing`](keyboard-typing/) | keyboardを使ったtyping application |
+| Example | Description |
+| --- | --- |
+| [`multilingual-text`](multilingual-text/) | Static English, Japanese, Chinese, and Korean text |
+| [`multilingual-ticker`](multilingual-ticker/) | Looping horizontal scroll with four languages |
+| [`multilingual-ticker2`](multilingual-ticker2/) | Independent 24-dot multilingual tickers with different positions and speeds, plus an elapsed-time display |
+| [`multilingual-document`](multilingual-document/) | Application-level vertical document scrolling with a four-language ModGadget introduction |
+| [`audio-beep`](audio-beep/) | Cardputer ADV audio playback |
+| [`keyboard-typing`](keyboard-typing/) | Small keyboard-driven typing application |
 
-## Test
+## Complete application
 
-Host側で確認できるlogic testは次で実行します。hardware用`main.go`はTinyGo
-build tag付きです。
+For a complete application built with the same public ModGadget APIs, see:
+
+- [Rdon Type 100](https://github.com/rdon-key/rdon-type100)
+
+Rdon Type 100 combines multilingual fonts, text layout, Viewports, scrolling, keyboard input, audio, and application state into a complete Cardputer ADV typing game.
+
+A prebuilt firmware image is also available from the [Rdon Type 100 Releases](https://github.com/rdon-key/rdon-type100/releases/latest) page.
+
+## Clone
+
+Clone this repository:
 
 ```sh
-go test ./...
+git clone https://github.com/rdon-key/modgadget-examples.git
+cd modgadget-examples
 ```
 
-## TinyGo build
+Download the Go module dependencies:
 
-Cardputer ADV対応の`m5stamp-s3a` targetを含むTinyGo開発版が必要です。
-例えば最初のexampleは次のようにbuildします。
+```sh
+go mod download
+```
+
+ModGadget and ModGadget Fonts are downloaded automatically through the Go module system.
+
+## TinyGo setup
+
+The Cardputer ADV examples cannot currently be built with a released version of TinyGo. They require TinyGo `0.42.0-dev` built from the TinyGo `dev` branch, which includes support for the M5Stamp-S3A.
+
+Examples that embed the large multilingual MGF font assets also require the ESP32-S3 large-flash fix provided by [PR #5567](https://github.com/tinygo-org/tinygo/pull/5567).
+
+Without this fix, the ESP32-S3 ROM bootloader may reject a large firmware image before TinyGo startup code begins executing.
+
+For complete TinyGo source-build and patch instructions, see the [Rdon Type 100 TinyGo setup](https://github.com/rdon-key/rdon-type100#tinygo-setup).
+
+## Build
+
+Each example can be built independently.
+
+For example:
 
 ```sh
 tinygo build -target=m5stamp-s3a ./multilingual-text
 ```
 
-他のexampleも末尾のdirectory名を置き換えて単独でbuildできます。flashは
-各exampleのREADMEに記載した別操作です。
+Other examples can be built by replacing the final directory name:
+
+```sh
+tinygo build -target=m5stamp-s3a ./multilingual-ticker
+tinygo build -target=m5stamp-s3a ./multilingual-ticker2
+tinygo build -target=m5stamp-s3a ./multilingual-document
+tinygo build -target=m5stamp-s3a ./audio-beep
+tinygo build -target=m5stamp-s3a ./keyboard-typing
+```
+
+Flashing instructions and example-specific controls are documented in each example's README.
+
+## Test
+
+Logic that can run on the host is tested with the standard Go toolchain:
+
+```sh
+go test ./...
+```
+
+Hardware-specific `main.go` files use TinyGo build constraints.
+
+Host-side tests do not access the Cardputer ADV hardware. Before flashing an example, also build it with the required TinyGo development version.
+
+## Related projects
+
+| Repository | Purpose |
+| --- | --- |
+| [modgadget](https://github.com/rdon-key/modgadget) | TinyGo UI, display, input, and device toolkit |
+| [modgadget-fonts](https://github.com/rdon-key/modgadget-fonts) | Importable multilingual MGF bitmap-font packages |
+| [rdon-type100](https://github.com/rdon-key/rdon-type100) | Complete multilingual Cardputer ADV application |
+| [modgadget-font-assets](https://github.com/rdon-key/modgadget-font-assets) | Font sources, provenance, generation, and validation |
 
 ## License
 
 BSD 3-Clause.
+
