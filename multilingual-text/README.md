@@ -1,13 +1,14 @@
 # multilingual-text
 
-最初に試す example です。英語、日本語、中国語、韓国語を一つの
-`Viewport` に静的表示します。scroll、keyboard、audio は使用しません。
+This is the simplest example to try first. It displays English, Japanese,
+Chinese, and Korean text in a single static `Viewport`. It does not use
+scrolling, keyboard input, or audio.
 
 - Hardware: M5Stack Cardputer ADV
 - Public API: `New`, `WithStyles`, `Bounds`, `Viewport`, `SetText`, `Render`
 - Font: `github.com/rdon-key/modgadget-fonts/efont16`
 - Expected display: `English 日本語 中文 한국어`
-- Operation: 起動後は表示したまま待機します。
+- Controls: none; the text remains on screen after startup
 
 ```sh
 tinygo build -target=m5stamp-s3a ./multilingual-text

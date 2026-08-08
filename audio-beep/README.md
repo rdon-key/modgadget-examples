@@ -1,14 +1,14 @@
 # audio-beep
 
-Cardputer ADVの公開audio APIで、組み込みsound patternを一度ずつ再生する
-最小exampleです。cooperative playerを`Update`しながら各音の完了を待ち、
-sequence終了後は静かに待機します。
+This minimal Cardputer ADV audio example plays three built-in sound patterns
+once. It calls `Update` on the cooperative player while waiting for each sound
+to finish, then remains silent after the sequence completes.
 
 - Hardware: M5Stack Cardputer ADV
 - Public API: `device/cardputeradv.ConfigureAudio`, `audio/cardputeradv.Player.PlayPattern`, `Update`, `Busy`, `Stop`
-- Font: 使用しません。
-- Expected sound: Startup、Click、Correctを各1回、300ms間隔で再生します。
-- Operation: 起動後は操作不要です。displayとkeyboardは使用しません。
+- Font: none
+- Expected sound: Startup, Click, and Correct once each, separated by 300 ms
+- Controls: none; the example does not use the display or keyboard
 
 ```sh
 tinygo build -target=m5stamp-s3a ./audio-beep

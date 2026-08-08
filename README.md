@@ -14,6 +14,7 @@ Each example can be built independently and demonstrates a specific part of the 
 | [`multilingual-ticker`](multilingual-ticker/) | Looping horizontal scroll with four languages |
 | [`multilingual-ticker2`](multilingual-ticker2/) | Independent 24-dot multilingual tickers with different positions and speeds, plus an elapsed-time display |
 | [`multilingual-document`](multilingual-document/) | Application-level vertical document scrolling with a four-language ModGadget introduction |
+| [`multilingual-showcase`](multilingual-showcase/) | One-shot 24-dot ticker with nine multilingual greetings, alternating white and cyan |
 | [`audio-beep`](audio-beep/) | Cardputer ADV audio playback |
 | [`keyboard-typing`](keyboard-typing/) | Small keyboard-driven typing application |
 
@@ -70,6 +71,7 @@ Other examples can be built by replacing the final directory name:
 tinygo build -target=m5stamp-s3a ./multilingual-ticker
 tinygo build -target=m5stamp-s3a ./multilingual-ticker2
 tinygo build -target=m5stamp-s3a ./multilingual-document
+tinygo build -target=m5stamp-s3a ./multilingual-showcase
 tinygo build -target=m5stamp-s3a ./audio-beep
 tinygo build -target=m5stamp-s3a ./keyboard-typing
 ```
@@ -100,4 +102,3 @@ Host-side tests do not access the Cardputer ADV hardware. Before flashing an exa
 ## License
 
 BSD 3-Clause.
-
