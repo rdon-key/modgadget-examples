@@ -15,8 +15,8 @@ Each example can be built independently and demonstrates a specific part of the 
 | [`multilingual-ticker2`](multilingual-ticker2/) | Independent 24-dot multilingual tickers with different positions and speeds, plus an elapsed-time display |
 | [`multilingual-document`](multilingual-document/) | Application-level vertical document scrolling with a four-language ModGadget introduction |
 | [`multilingual-showcase`](multilingual-showcase/) | One-shot 24-dot ticker with nine multilingual greetings, alternating white and cyan |
-| [`audio-beep`](audio-beep/) | Cardputer ADV audio playback |
-| [`keyboard-typing`](keyboard-typing/) | Small keyboard-driven typing application |
+| [`audio-beep`](audio-beep/) | Standalone example of the public Cardputer ADV audio API, playing three built-in patterns |
+| [`keyboard-typing`](keyboard-typing/) | Keyboard-driven text entry with Backspace and Cardputer ADV volume shortcuts |
 
 ## Complete application
 
@@ -49,7 +49,10 @@ ModGadget and ModGadget Fonts are downloaded automatically through the Go module
 
 The Cardputer ADV examples cannot currently be built with a released version of TinyGo. They require TinyGo `0.42.0-dev` built from the TinyGo `dev` branch, which includes support for the M5Stamp-S3A.
 
-Examples that embed the large multilingual MGF font assets also require the ESP32-S3 large-flash fix provided by [PR #5567](https://github.com/tinygo-org/tinygo/pull/5567).
+The multilingual examples and `keyboard-typing`, which embed multilingual MGF
+font data, also require the ESP32-S3 large-flash fix provided by
+[PR #5567](https://github.com/tinygo-org/tinygo/pull/5567). The font-free
+`audio-beep` example does not require this fix.
 
 Without this fix, the ESP32-S3 ROM bootloader may reject a large firmware image before TinyGo startup code begins executing.
 
@@ -94,10 +97,11 @@ Host-side tests do not access the Cardputer ADV hardware. Before flashing an exa
 
 | Repository | Purpose |
 | --- | --- |
-| [modgadget](https://github.com/rdon-key/modgadget) | TinyGo UI, display, input, and device toolkit |
+| [modgadget](https://github.com/rdon-key/modgadget) | TinyGo UI/device toolkit and core API-focused or diagnostic examples |
+| [modgadget-examples](https://github.com/rdon-key/modgadget-examples) | Standalone practical examples that consume ModGadget as a module dependency |
 | [modgadget-fonts](https://github.com/rdon-key/modgadget-fonts) | Importable multilingual MGF bitmap-font packages |
 | [rdon-type100](https://github.com/rdon-key/rdon-type100) | Complete multilingual Cardputer ADV application |
-| [modgadget-font-assets](https://github.com/rdon-key/modgadget-font-assets) | Font sources, provenance, generation, and validation |
+| [modgadget-font-assets](https://github.com/rdon-key/modgadget-font-assets) | Canonical font sources, provenance, generation, validation, and immutable MGF assets |
 
 ## License
 

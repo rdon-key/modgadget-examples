@@ -5,7 +5,7 @@ Chinese, and Korean text in a single static `Viewport`. It does not use
 scrolling, keyboard input, or audio.
 
 - Hardware: M5Stack Cardputer ADV
-- Public API: `New`, `WithStyles`, `Bounds`, `Viewport`, `SetText`, `Render`
+- Main APIs: `New`, `WithStyles`, `Bounds`, `Viewport`, `SetText`, `Render`
 - Font: `github.com/rdon-key/modgadget-fonts/efont16`
 - Expected display: `English 日本語 中文 한국어`
 - Controls: none; the text remains on screen after startup

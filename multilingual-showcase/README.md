@@ -7,7 +7,7 @@ alternating white and cyan styles. The ticker enters from the right at 50 px/s
 and scrolls left once.
 
 - Hardware: M5Stack Cardputer ADV
-- Public API: `New`, `WithStyles`, `Viewport`, `SetText`, `SetHorizontalScroll`, `ScrollSpeed`, `ScrollFromRight`, `Update`, `Render`
+- Main APIs: `New`, `WithStyles`, `Viewport`, `SetText`, `SetHorizontalScroll`, `ScrollSpeed`, `ScrollFromRight`, `Update`, `Render`
 - Font: `github.com/rdon-key/modgadget-fonts/efont24`
 - Expected display: one multilingual greeting ticker centered vertically on a black background
 - Controls: none

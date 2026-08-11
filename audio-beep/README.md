@@ -1,11 +1,13 @@
 # audio-beep
 
-This minimal Cardputer ADV audio example plays three built-in sound patterns
-once. It calls `Update` on the cooperative player while waiting for each sound
-to finish, then remains silent after the sequence completes.
+This is the standalone example of ModGadget's public Cardputer ADV audio API.
+It configures the device with `device/cardputeradv.ConfigureAudio`, then plays
+the built-in `PatternStartup`, `PatternClick`, and `PatternCorrect` sounds once.
+It calls `Player.Update` while each sound is busy and remains silent after the
+sequence completes.
 
 - Hardware: M5Stack Cardputer ADV
-- Public API: `device/cardputeradv.ConfigureAudio`, `audio/cardputeradv.Player.PlayPattern`, `Update`, `Busy`, `Stop`
+- Main APIs: `device/cardputeradv.ConfigureAudio`; `audio/cardputeradv.PatternStartup`, `PatternClick`, `PatternCorrect`, and `Player.PlayPattern`, `Update`, `Busy`, `Stop`
 - Font: none
 - Expected sound: Startup, Click, and Correct once each, separated by 300 ms
 - Controls: none; the example does not use the display or keyboard
