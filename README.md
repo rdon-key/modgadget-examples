@@ -19,6 +19,7 @@ Each example can be built independently and demonstrates a specific part of the 
 | [`keyboard-typing`](keyboard-typing/) | Keyboard-driven text entry with Backspace and Cardputer ADV volume shortcuts |
 | [`mgz-text`](mgz-text/) | Static multilingual text using the compressed 24-dot MGZ font package |
 | [`zerokb02-traditional`](zerokb02-traditional/) | 16-dot compressed Traditional Chinese text on the Zero-KB02 OLED |
+| [`zerokb02-oled-test`](zerokb02-oled-test/) | Font-independent white/black OLED and I2C diagnostic for Zero-KB02 |
 
 ## Complete application
 
