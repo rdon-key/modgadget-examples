@@ -19,6 +19,26 @@ If the flash operation succeeds but the screen remains blank, first run
 problems from font/text rendering. Check the greeting glyphs with
 `go test ./zerokb02-traditional -run TestGreetingGlyphCoverage -v`.
 
+### Serial diagnostics
+
+The OLED white/black diagnostics and the host glyph coverage test have
+both been confirmed working, but the full greeting initially remained blank.
+The greeting example now emits progress information on USB CDC serial.
+
+```sh
+tinygo flash -target=waveshare-rp2040-zero ./zerokb02-traditional
+tinygo monitor -target=waveshare-rp2040-zero
+```
+
+Look for `greeting demo starting`, `OLED configured`, the seven
+`lookup glyph` messages, `all glyphs decoded`, `OLED cleared`,
+`building text layout`, `rendering text`, and `render complete`.
+The last printed stage identifies where execution stops. If `lookup glyph`
+fails on the device but passes in the host test, investigate the MGZ
+DEFLATE decoding path on TinyGo. If no startup text appears even after
+resetting with the monitor connected, initialization of the imported font
+package may have panicked before `main` began.
+
 The example currently demonstrates **display only**. Keyboard, joystick,
 rotary encoder, LEDs and USB HID are not initialized.
 
