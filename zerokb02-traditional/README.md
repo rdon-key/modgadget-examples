@@ -23,6 +23,30 @@ problems from font/text rendering. If the white/black OLED test passes, run
 small 8x16 MGZ font through the same ModGadget viewport API. Check the greeting
 glyphs with `go test ./zerokb02-traditional -run TestGreetingGlyphCoverage -v`.
 
+### Startup and OLED diagnostics
+
+The full 16-dot font and the first 17 KB subset both built and flashed
+without errors, yet neither produced any serial heartbeat. In contrast,
+the OLED black/white diagnostic and the smaller Spleen font's `HELLO`
+text rendering both worked. The original Efont16 package and the first
+subset package both opened the font **before** `main()`, via a global
+`MustOpenMGZ` initializer.
+
+The subset package now provides `Open()`, allowing the application to
+enter `main()`, initialize the OLED, and only then parse the MGZ file.
+
+On startup, before attempting to open the font, the greeting example:
+1. Draws a **solid white 16x8 marker at the top-left** of the OLED.
+2. Prints a countdown to opening the font for 8 seconds.
+3. Calls `efont16zerokb02.Open()` and attempts to render the greeting.
+
+**If the marker never appears**, the firmware may fail before or
+during `ConfigureDisplay()`. **If the marker appears but no greeting
+follows**, the font-opening and later rendering stages are suspects.
+If the greeting succeeds, the marker is removed by `gadget.Clear()`.
+Connect the serial monitor immediately after flashing to see the
+countdown, then check for the repeated final status message.
+
 ### Serial diagnostics
 
 The OLED white/black diagnostics and the host glyph coverage test have
@@ -59,7 +83,7 @@ go mod download
 go get github.com/rdon-key/modgadget@d0b4f8a90fb4edbcf69116e405498f241315355b
 
 # Also use the standalone MGZ subset in modgadget-fonts PR #1:
-go get github.com/rdon-key/modgadget-fonts@c27fd3abac2cea861693ad1a209be11bbe1e3d25
+go get github.com/rdon-key/modgadget-fonts@885d3a279f8b8b2194097e3f6e907068481f063f
 
 tinygo build -target=waveshare-rp2040-zero -size=short -o zerokb02.uf2 ./zerokb02-traditional
 tinygo flash -target=waveshare-rp2040-zero ./zerokb02-traditional
@@ -81,8 +105,11 @@ full Efont16 MGZ is 876,150 bytes, and this compressed Efont16 subset
 is **17,001 bytes**. The full Efont16 firmware fitted in flash (970,660
 bytes) but produced no serial heartbeat and left the OLED blank.
 Both the font-free OLED test and small-font ModGadget `HELLO` test worked.
-The subset greatly reduces import-time MGZ metadata validation and should
-also leave ample flash room. Verify the rebuilt firmware and OLED output.
+The subset greatly reduces MGZ metadata validation at the time of an
+explicit `Open()` call and leaves ample flash room. The earlier subset
+with global initialization also failed to start; the deferred-open variant
+still requires real-device testing.
 
 The full Efont16 firmware built and flashed but the OLED was blank.
-The new 17KB subset has not yet been flashed or verified on Zero-KB02.
+The first 17KB subset flashed but produced no serial output. The new
+explicit-open variant has not yet been tested on Zero-KB02.
