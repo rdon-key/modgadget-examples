@@ -20,6 +20,7 @@ Each example can be built independently and demonstrates a specific part of the 
 | [`mgz-text`](mgz-text/) | Static multilingual text using the compressed 24-dot MGZ font package |
 | [`zerokb02-traditional`](zerokb02-traditional/) | 16-dot compressed Traditional Chinese text on the Zero-KB02 OLED |
 | [`zerokb02-oled-test`](zerokb02-oled-test/) | Font-independent white/black OLED and I2C diagnostic for Zero-KB02 |
+| [`zerokb02-text-test`](zerokb02-text-test/) | Tiny MGZ Spleen font / Viewport / text raster diagnostic on Zero-KB02 |
 
 ## Complete application
 
