@@ -16,8 +16,10 @@ provided by `github.com/rdon-key/modgadget/device/zerokb02`.
 
 If the flash operation succeeds but the screen remains blank, first run
 [`zerokb02-oled-test`](../zerokb02-oled-test/) to separate SSD1306/I2C
-problems from font/text rendering. Check the greeting glyphs with
-`go test ./zerokb02-traditional -run TestGreetingGlyphCoverage -v`.
+problems from font/text rendering. If the white/black OLED test passes, run
+[`zerokb02-text-test`](../zerokb02-text-test/) to render `HELLO` with a
+small 8x16 MGZ font through the same ModGadget viewport API. Check the greeting
+glyphs with `go test ./zerokb02-traditional -run TestGreetingGlyphCoverage -v`.
 
 ### Serial diagnostics
 
@@ -33,11 +35,13 @@ tinygo monitor -target=waveshare-rp2040-zero
 Look for `greeting demo starting`, `OLED configured`, the seven
 `lookup glyph` messages, `all glyphs decoded`, `OLED cleared`,
 `building text layout`, `rendering text`, and `render complete`.
-The last printed stage identifies where execution stops. If `lookup glyph`
+After rendering, the greeting demo repeats a `heartbeat, render complete`
+message every 2 seconds. All handled failure paths repeat a `FAILED at ...`
+message as well, even when the monitor connects late. If `lookup glyph`
 fails on the device but passes in the host test, investigate the MGZ
-DEFLATE decoding path on TinyGo. If no startup text appears even after
-resetting with the monitor connected, initialization of the imported font
-package may have panicked before `main` began.
+DEFLATE decoding path on TinyGo. If **no messages appear at all** with the
+repeating logs, the firmware may have stopped before `main` (for example,
+during initialization of the imported Efont16 package).
 
 The example currently demonstrates **display only**. Keyboard, joystick,
 rotary encoder, LEDs and USB HID are not initialized.
