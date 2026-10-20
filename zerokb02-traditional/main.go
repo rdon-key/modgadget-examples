@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/rdon-key/modgadget"
-	"github.com/rdon-key/modgadget-fonts/efont24"
+	"github.com/rdon-key/modgadget-fonts/efont16"
 	board "github.com/rdon-key/modgadget/device/zerokb02"
 )
 
@@ -18,11 +18,11 @@ func main() {
 		panic(err)
 	}
 
-	font := efont24.Font
+	font := efont16.Font
 	const message = "恭喜進軍台灣！"
 	for _, r := range message {
 		if !font.HasGlyph(r) {
-			panic("efont24: missing greeting glyph")
+			panic("efont16: missing greeting glyph")
 		}
 	}
 
@@ -37,13 +37,10 @@ func main() {
 		panic(err)
 	}
 
-	// Four 24-dot glyphs fit on the first line of the 128-pixel OLED.
-	first := gadget.Viewport(modgadget.Bounds(16, 0, 112, 32))
-	if err := first.SetText("恭喜進軍"); err != nil {
-		panic(err)
-	}
-	second := gadget.Viewport(modgadget.Bounds(28, 32, 100, 32))
-	if err := second.SetText("台灣！"); err != nil {
+	// Seven 16-dot CJK glyphs fit across the 128-pixel OLED.
+	// Keep the complete greeting on one line, approximately centered.
+	view := gadget.Viewport(modgadget.Bounds(8, 20, 120, 24))
+	if err := view.SetText(message); err != nil {
 		panic(err)
 	}
 	if err := gadget.Render(); err != nil {
