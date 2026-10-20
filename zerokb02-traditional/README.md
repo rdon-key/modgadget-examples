@@ -4,7 +4,9 @@ Display **恭喜進軍台灣！** ("Congratulations on expanding to Taiwan!")
 on one line in a 16-dot bitmap font on the TinyGo Keeb Tour Zero-KB02's 128x64 monochrome OLED.
 
 This example consumes ModGadget and its ready-to-use compressed
-`efont16.Font` from [modgadget-fonts](https://github.com/rdon-key/modgadget-fonts).
+`efont16zerokb02.Font` from [modgadget-fonts](https://github.com/rdon-key/modgadget-fonts/pull/1).
+This is a 17,001-byte compressed subset of Efont16 with 448 glyphs,
+including all seven characters in the greeting.
 It does not generate or copy fonts into ModGadget itself. The OLED adapter is
 provided by `github.com/rdon-key/modgadget/device/zerokb02`.
 
@@ -41,7 +43,7 @@ message as well, even when the monitor connects late. If `lookup glyph`
 fails on the device but passes in the host test, investigate the MGZ
 DEFLATE decoding path on TinyGo. If **no messages appear at all** with the
 repeating logs, the firmware may have stopped before `main` (for example,
-during initialization of the imported Efont16 package).
+during initialization of the imported full Efont16 package).
 
 The example currently demonstrates **display only**. Keyboard, joystick,
 rotary encoder, LEDs and USB HID are not initialized.
@@ -56,6 +58,9 @@ go mod download
 # Until ModGadget PR #13 is merged, use the commit that adds Zero-KB02:
 go get github.com/rdon-key/modgadget@d0b4f8a90fb4edbcf69116e405498f241315355b
 
+# Also use the standalone MGZ subset in modgadget-fonts PR #1:
+go get github.com/rdon-key/modgadget-fonts@c27fd3abac2cea861693ad1a209be11bbe1e3d25
+
 tinygo build -target=waveshare-rp2040-zero -size=short -o zerokb02.uf2 ./zerokb02-traditional
 tinygo flash -target=waveshare-rp2040-zero ./zerokb02-traditional
 ```
@@ -66,17 +71,18 @@ It is needed while [ModGadget PR #13](https://github.com/rdon-key/modgadget/pull
 is unmerged; when the driver becomes available in the normal ModGadget
 dependency, use that version instead.
 
-The existing `modgadget-fonts` dependency already provides `efont16`.
-No extra `go get` of the font package is necessary.
+The repository already depends on `modgadget-fonts`, but the original
+revision does not contain `efont16zerokb02`. The second `go get` above
+upgrades that dependency to a commit containing the new compressed subset.
+Both commands temporarily update the local `go.mod` and `go.sum`.
 
-**Flash budget:** the compressed full Efont16 asset is 876,150 bytes,
-639,512 bytes smaller than Efont24 (1,515,662 bytes). A previous
-Efont24 build exceeded the 2 MB RP2040-Zero flash by 567,252 bytes.
-A user confirmed a flashable 16-dot build at 970,660 bytes of flash,
-but the OLED remained blank; display diagnostics are pending.
-If it is still too large, generate a subset MGZ using
-[modgadget-font-assets](https://github.com/rdon-key/modgadget-font-assets)
-and distribute it as a font package.
+**Flash budget and startup:** the full Efont24 MGZ is 1,515,662 bytes,
+full Efont16 MGZ is 876,150 bytes, and this compressed Efont16 subset
+is **17,001 bytes**. The full Efont16 firmware fitted in flash (970,660
+bytes) but produced no serial heartbeat and left the OLED blank.
+Both the font-free OLED test and small-font ModGadget `HELLO` test worked.
+The subset greatly reduces import-time MGZ metadata validation and should
+also leave ample flash room. Verify the rebuilt firmware and OLED output.
 
-The 16-dot firmware builds and flashes on Zero-KB02; successful OLED output
-has **not** yet been verified.
+The full Efont16 firmware built and flashed but the OLED was blank.
+The new 17KB subset has not yet been flashed or verified on Zero-KB02.
