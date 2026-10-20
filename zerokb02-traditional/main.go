@@ -13,7 +13,7 @@ import (
 // This demo uses an external compressed MGZ font; the Zero-KB02-specific
 // hardware code remains in ModGadget's device/zerokb02 package.
 func main() {
-	// Leave time for the USB CDC serial monitor to attach.
+	// With no package-level MGZ parsing, main can start first.
 	time.Sleep(2 * time.Second)
 	println("zero-kb02: greeting demo starting")
 	panel, err := board.ConfigureDisplay()
@@ -22,11 +22,25 @@ func main() {
 	}
 	println("zero-kb02: OLED configured")
 
-	font := efont16zerokb02.Font
+	// A white 16x8 square proves that main() has executed on the real OLED.
+	// It stays on screen if the font subsequently panics or freezes.
+	if err := bootMarker(panel); err != nil {
+		halt("boot marker", err.Error())
+	}
+	for i := 8; i > 0; i-- {
+		println("zero-kb02: OLED boot marker visible; opening font in", i, "seconds")
+		time.Sleep(time.Second)
+	}
+
+	println("zero-kb02: entering font Open()")
+	font, err := efont16zerokb02.Open()
+	if err != nil {
+		halt("font Open", err.Error())
+	}
 	if !font.Valid() {
 		halt("invalid font", "efont16zerokb02 font handle is invalid")
 	}
-	println("zero-kb02: Efont16 Zero-KB02 subset initialized")
+	println("zero-kb02: Efont16 Zero-KB02 subset opened")
 	const message = "恭喜進軍台灣！"
 	for _, r := range message {
 		println("zero-kb02: lookup glyph:", string(r))
@@ -75,4 +89,21 @@ func halt(stage, detail string) {
 		println("zero-kb02: FAILED at", stage, ":", detail)
 		time.Sleep(2 * time.Second)
 	}
+}
+
+// bootMarker paints a small white square without involving fonts or layout.
+// The drawing uses exactly the same OLED API verified by zerokb02-oled-test.
+func bootMarker(panel modgadget.Display) error {
+	const w, h = int16(16), int16(8)
+	var rgb [16 * 8 * 2]byte
+	for i := range rgb {
+		rgb[i] = 0xff
+	}
+	if err := panel.BeginRect(0, 0, w, h); err != nil {
+		return err
+	}
+	if err := panel.WritePixels(rgb[:]); err != nil {
+		return err
+	}
+	return panel.EndRect()
 }
