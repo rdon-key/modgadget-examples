@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/rdon-key/modgadget"
-	"github.com/rdon-key/modgadget-fonts/efont16"
+	"github.com/rdon-key/modgadget-fonts/efont16zerokb02"
 	board "github.com/rdon-key/modgadget/device/zerokb02"
 )
 
@@ -22,11 +22,11 @@ func main() {
 	}
 	println("zero-kb02: OLED configured")
 
-	font := efont16.Font
+	font := efont16zerokb02.Font
 	if !font.Valid() {
-		halt("invalid font", "efont16 font handle is invalid")
+		halt("invalid font", "efont16zerokb02 font handle is invalid")
 	}
-	println("zero-kb02: Efont16 initialized")
+	println("zero-kb02: Efont16 Zero-KB02 subset initialized")
 	const message = "恭喜進軍台灣！"
 	for _, r := range message {
 		println("zero-kb02: lookup glyph:", string(r))
