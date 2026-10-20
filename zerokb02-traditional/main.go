@@ -6,14 +6,14 @@ import (
 	"time"
 
 	"github.com/rdon-key/modgadget"
-	"github.com/rdon-key/modgadget-fonts/efont16zerokb02"
+	"github.com/rdon-key/modgadget-fonts/efont16"
 	board "github.com/rdon-key/modgadget/device/zerokb02"
 )
 
 // This demo uses an external compressed MGZ font; the Zero-KB02-specific
 // hardware code remains in ModGadget's device/zerokb02 package.
 func main() {
-	// With no package-level MGZ parsing, main can start first.
+	// The full Efont16 package initializes its font before main() runs.
 	time.Sleep(2 * time.Second)
 	println("zero-kb02: greeting demo starting")
 	panel, err := board.ConfigureDisplay()
@@ -23,24 +23,20 @@ func main() {
 	println("zero-kb02: OLED configured")
 
 	// A white 16x8 square proves that main() has executed on the real OLED.
-	// It stays on screen if the font subsequently panics or freezes.
+	// It remains visible if glyph lookup or rendering later fails.
 	if err := bootMarker(panel); err != nil {
 		halt("boot marker", err.Error())
 	}
 	for i := 8; i > 0; i-- {
-		println("zero-kb02: OLED boot marker visible; opening font in", i, "seconds")
+		println("zero-kb02: OLED boot marker visible; full Efont16 test in", i, "seconds")
 		time.Sleep(time.Second)
 	}
 
-	println("zero-kb02: entering font Open()")
-	font, err := efont16zerokb02.Open()
-	if err != nil {
-		halt("font Open", err.Error())
-	}
+	font := efont16.Font
 	if !font.Valid() {
-		halt("invalid font", "efont16zerokb02 font handle is invalid")
+		halt("invalid font", "full Efont16 font handle is invalid")
 	}
-	println("zero-kb02: Efont16 Zero-KB02 subset opened")
+	println("zero-kb02: full Efont16 ready (24,618 glyphs)")
 	const message = "恭喜進軍台灣！"
 	for _, r := range message {
 		println("zero-kb02: lookup glyph:", string(r))
