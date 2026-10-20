@@ -14,6 +14,11 @@ provided by `github.com/rdon-key/modgadget/device/zerokb02`.
 - SSD1306 OLED: 128x64, I2C0, GPIO12 SDA, GPIO13 SCL, address 0x3c
 - Physical OLED orientation: 180 degrees
 
+If the flash operation succeeds but the screen remains blank, first run
+[`zerokb02-oled-test`](../zerokb02-oled-test/) to separate SSD1306/I2C
+problems from font/text rendering. Check the greeting glyphs with
+`go test ./zerokb02-traditional -run TestGreetingGlyphCoverage -v`.
+
 The example currently demonstrates **display only**. Keyboard, joystick,
 rotary encoder, LEDs and USB HID are not initialized.
 
@@ -43,9 +48,11 @@ No extra `go get` of the font package is necessary.
 **Flash budget:** the compressed full Efont16 asset is 876,150 bytes,
 639,512 bytes smaller than Efont24 (1,515,662 bytes). A previous
 Efont24 build exceeded the 2 MB RP2040-Zero flash by 567,252 bytes.
-The 16-dot build is expected to fit, but verify the actual link result.
+A user confirmed a flashable 16-dot build at 970,660 bytes of flash,
+but the OLED remained blank; display diagnostics are pending.
 If it is still too large, generate a subset MGZ using
 [modgadget-font-assets](https://github.com/rdon-key/modgadget-font-assets)
 and distribute it as a font package.
 
-This example has not yet been cross-built or verified on a physical Zero-KB02.
+The 16-dot firmware builds and flashes on Zero-KB02; successful OLED output
+has **not** yet been verified.
