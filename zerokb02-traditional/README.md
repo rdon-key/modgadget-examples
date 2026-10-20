@@ -1,10 +1,10 @@
 # Zero-KB02: Traditional Chinese with a compressed font
 
-Display **恭喜進軍 / 台灣！** ("Congratulations on expanding to Taiwan!")
-in two lines on the TinyGo Keeb Tour Zero-KB02's 128x64 monochrome OLED.
+Display **恭喜進軍台灣！** ("Congratulations on expanding to Taiwan!")
+on one line in a 16-dot bitmap font on the TinyGo Keeb Tour Zero-KB02's 128x64 monochrome OLED.
 
 This example consumes ModGadget and its ready-to-use compressed
-`efont24.Font` from [modgadget-fonts](https://github.com/rdon-key/modgadget-fonts).
+`efont16.Font` from [modgadget-fonts](https://github.com/rdon-key/modgadget-fonts).
 It does not generate or copy fonts into ModGadget itself. The OLED adapter is
 provided by `github.com/rdon-key/modgadget/device/zerokb02`.
 
@@ -37,12 +37,14 @@ It is needed while [ModGadget PR #13](https://github.com/rdon-key/modgadget/pull
 is unmerged; when the driver becomes available in the normal ModGadget
 dependency, use that version instead.
 
-The existing `modgadget-fonts` dependency already provides `efont24`.
+The existing `modgadget-fonts` dependency already provides `efont16`.
 No extra `go get` of the font package is necessary.
 
-**Flash budget:** the compressed full Efont24 asset is 1,515,662 bytes.
-Check the compiled firmware size against the RP2040-Zero's 2 MB flash.
-If it is too large, generate a subset MGZ using
+**Flash budget:** the compressed full Efont16 asset is 876,150 bytes,
+639,512 bytes smaller than Efont24 (1,515,662 bytes). A previous
+Efont24 build exceeded the 2 MB RP2040-Zero flash by 567,252 bytes.
+The 16-dot build is expected to fit, but verify the actual link result.
+If it is still too large, generate a subset MGZ using
 [modgadget-font-assets](https://github.com/rdon-key/modgadget-font-assets)
 and distribute it as a font package.
 
