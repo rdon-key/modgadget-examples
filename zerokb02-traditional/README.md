@@ -24,8 +24,8 @@ From the `modgadget-examples` repository root:
 ```sh
 go mod download
 
-# Until ModGadget PR #13 is merged, use the branch that adds Zero-KB02:
-go get github.com/rdon-key/modgadget@feat/zerokb02-ssd1306
+# Until ModGadget PR #13 is merged, use the commit that adds Zero-KB02:
+go get github.com/rdon-key/modgadget@d0b4f8a90fb4edbcf69116e405498f241315355b
 
 tinygo build -target=waveshare-rp2040-zero -size=short -o zerokb02.uf2 ./zerokb02-traditional
 tinygo flash -target=waveshare-rp2040-zero ./zerokb02-traditional
