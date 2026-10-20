@@ -18,25 +18,21 @@ func main() {
 	println("zero-kb02: greeting demo starting")
 	panel, err := board.ConfigureDisplay()
 	if err != nil {
-		println("zero-kb02: OLED init failed:", err.Error())
-		panic(err)
+		halt("OLED init", err.Error())
 	}
 	println("zero-kb02: OLED configured")
 
 	font := efont16.Font
 	if !font.Valid() {
-		println("zero-kb02: invalid font")
-		panic("efont16 is invalid")
+		halt("invalid font", "efont16 font handle is invalid")
 	}
 	println("zero-kb02: Efont16 initialized")
 	const message = "恭喜進軍台灣！"
 	for _, r := range message {
 		println("zero-kb02: lookup glyph:", string(r))
 		if !font.HasGlyph(r) {
-			println("zero-kb02: glyph lookup failed:", string(r))
-			// The glyph can exist in the index but fail to decompress on
-			// target, because HasGlyph calls the full MGZ lookup path.
-			panic("efont16: missing glyph or decompression failure")
+			// HasGlyph calls the full MGZ lookup/decompression path.
+			halt("glyph lookup", string(r))
 		}
 	}
 	println("zero-kb02: all glyphs decoded")
@@ -50,8 +46,7 @@ func main() {
 	}))
 	println("zero-kb02: clearing OLED")
 	if err := gadget.Clear(); err != nil {
-		println("zero-kb02: OLED clear failed:", err.Error())
-		panic(err)
+		halt("OLED clear", err.Error())
 	}
 	println("zero-kb02: OLED cleared")
 
@@ -60,17 +55,24 @@ func main() {
 	view := gadget.Viewport(modgadget.Bounds(8, 20, 120, 24))
 	println("zero-kb02: building text layout")
 	if err := view.SetText(message); err != nil {
-		println("zero-kb02: SetText failed:", err.Error())
-		panic(err)
+		halt("SetText", err.Error())
 	}
 	println("zero-kb02: rendering text")
 	if err := gadget.Render(); err != nil {
-		println("zero-kb02: Render failed:", err.Error())
-		panic(err)
+		halt("Render", err.Error())
 	}
 	println("zero-kb02: render complete")
 
 	for {
-		time.Sleep(time.Second)
+		println("zero-kb02: heartbeat, render complete")
+		time.Sleep(2 * time.Second)
+	}
+}
+
+// Repeat the failure even if the USB serial monitor attaches after startup.
+func halt(stage, detail string) {
+	for {
+		println("zero-kb02: FAILED at", stage, ":", detail)
+		time.Sleep(2 * time.Second)
 	}
 }
