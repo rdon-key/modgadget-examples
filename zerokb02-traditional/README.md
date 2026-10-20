@@ -23,6 +23,23 @@ problems from font/text rendering. If the white/black OLED test passes, run
 small 8x16 MGZ font through the same ModGadget viewport API. Check the greeting
 glyphs with `go test ./zerokb02-traditional -run TestGreetingGlyphCoverage -v`.
 
+### RP2040 out-of-memory diagnosis
+
+The earlier 17KB font successfully opened, but the RP2040 logged
+`fatal error: out of memory` while looking up the sixth glyph (`灣`).
+The seven greeting glyphs occupy seven different MGZ DEFLATE blocks.
+`mgz.Font` previously created a new `flate.NewReader` for each block,
+which can consume substantially more heap than the compressed asset size.
+
+[ModGadget PR #14](https://github.com/rdon-key/modgadget/pull/14)
+reuses a single DEFLATE decoder with `flate.Resetter.Reset` across cache
+misses. The revised ModGadget revision above includes **both** the OLED
+driver (PR #13) and this tentative RAM improvement (PR #14).
+
+The reader-reuse fix is not yet verified on hardware. A TinyGo GC bug
+has **not** been established; the current code's allocation pattern
+itself can exhaust a constrained MCU heap.
+
 ### Startup and OLED diagnostics
 
 The full 16-dot font and the first 17 KB subset both built and flashed
@@ -79,8 +96,8 @@ From the `modgadget-examples` repository root:
 ```sh
 go mod download
 
-# Until ModGadget PR #13 is merged, use the commit that adds Zero-KB02:
-go get github.com/rdon-key/modgadget@d0b4f8a90fb4edbcf69116e405498f241315355b
+# Until ModGadget PRs #13 and #14 merge, use the OLED driver + MGZ inflater fix:
+go get github.com/rdon-key/modgadget@680edd09ff0dce5daedd7df0a03f0697dba29f71
 
 # Also use the standalone MGZ subset in modgadget-fonts PR #1:
 go get github.com/rdon-key/modgadget-fonts@885d3a279f8b8b2194097e3f6e907068481f063f
