@@ -1,6 +1,6 @@
 # ModGadget Examples
 
-This repository contains standalone TinyGo examples for the M5Stack Cardputer ADV using [ModGadget](https://github.com/rdon-key/modgadget).
+This repository contains standalone TinyGo examples using [ModGadget](https://github.com/rdon-key/modgadget). Most examples target the M5Stack Cardputer ADV; the `zerokb02-traditional` example targets the TinyGo Keeb Tour Zero-KB02.
 
 ModGadget and [ModGadget Fonts](https://github.com/rdon-key/modgadget-fonts) are obtained as ordinary Go module dependencies. A local clone of the ModGadget repository is not required.
 
@@ -18,6 +18,10 @@ Each example can be built independently and demonstrates a specific part of the 
 | [`audio-beep`](audio-beep/) | Standalone example of the public Cardputer ADV audio API, playing three built-in patterns |
 | [`keyboard-typing`](keyboard-typing/) | Keyboard-driven text entry with Backspace and Cardputer ADV volume shortcuts |
 | [`mgz-text`](mgz-text/) | Static multilingual text using the compressed 24-dot MGZ font package |
+| [`zerokb02-traditional`](zerokb02-traditional/) | Traditional Chinese on Zero-KB02 OLED using all 24,618 Efont16 MGZ glyphs |
+| [`zerokb02-traditional24`](zerokb02-traditional24/) | Full Efont24 Traditional Chinese horizontal marquee on the Zero-KB02 OLED (custom 2 MiB target) |
+| [`zerokb02-oled-test`](zerokb02-oled-test/) | Font-independent white/black OLED and I2C diagnostic for Zero-KB02 |
+| [`zerokb02-text-test`](zerokb02-text-test/) | Tiny MGZ Spleen font / Viewport / text raster diagnostic on Zero-KB02 |
 
 ## Complete application
 
@@ -61,7 +65,7 @@ For complete TinyGo source-build and patch instructions, see the [Rdon Type 100 
 
 ## Build
 
-Each example can be built independently.
+Each example can be built independently. The commands below target Cardputer ADV; the Zero-KB02 example uses its own target and dependency instructions in [its README](zerokb02-traditional/README.md).
 
 For example:
 
@@ -93,7 +97,7 @@ go test ./...
 
 Hardware-specific `main.go` files use TinyGo build constraints.
 
-Host-side tests do not access the Cardputer ADV hardware. Before flashing an example, also build it with the required TinyGo development version.
+Host-side tests do not access embedded hardware. Before flashing an example, also cross-build it with the appropriate TinyGo target. The Zero-KB02 example currently requires the ModGadget Zero-KB02 display branch until [PR #13](https://github.com/rdon-key/modgadget/pull/13) is merged.
 
 ## Related projects
 
