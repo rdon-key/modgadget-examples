@@ -18,7 +18,7 @@ Each example can be built independently and demonstrates a specific part of the 
 | [`audio-beep`](audio-beep/) | Standalone example of the public Cardputer ADV audio API, playing three built-in patterns |
 | [`keyboard-typing`](keyboard-typing/) | Keyboard-driven text entry with Backspace and Cardputer ADV volume shortcuts |
 | [`mgz-text`](mgz-text/) | Static multilingual text using the compressed 24-dot MGZ font package |
-| [`zerokb02-traditional`](zerokb02-traditional/) | Traditional Chinese greeting with a 17KB MGZ Efont16 subset on the Zero-KB02 OLED |
+| [`zerokb02-traditional`](zerokb02-traditional/) | Traditional Chinese on Zero-KB02 OLED using all 24,618 Efont16 MGZ glyphs |
 | [`zerokb02-oled-test`](zerokb02-oled-test/) | Font-independent white/black OLED and I2C diagnostic for Zero-KB02 |
 | [`zerokb02-text-test`](zerokb02-text-test/) | Tiny MGZ Spleen font / Viewport / text raster diagnostic on Zero-KB02 |
 
